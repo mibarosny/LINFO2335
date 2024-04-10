@@ -1,6 +1,14 @@
 #lang r5rs
 
-; Students: Rosny Miba, Paquet Timothé
+; Students: Rosny Miba
+
+(define (object)
+  (define (type) 'object)
+  (define (error . _) (display "Message not understood"))
+  (define (self m)
+    (cond ((eq? m 'type) type)
+          (else error)))
+  self)
 
 (define (point x y)
   (define (getx) x)
@@ -9,7 +17,7 @@
   (define (info) (list (type) (getx) (gety)))
   (define (add p) (point (+ x ((p 'getx))) (+ y ((p 'gety)))))
   (define (setx! a) (set! x a))
-  (define (error . _) (display "Message not understood")) 
+  (define (error . _) (display "Message not understood"))
   (define (self m)
     (cond ((eq? m 'getx) getx)
           ((eq? m 'gety) gety)

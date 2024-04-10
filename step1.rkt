@@ -1,6 +1,6 @@
 #lang r5rs
 
-; Students: Rosny Miba
+; Students: Rosny Miba, Paquet Timothé
 
 (define (point x y)
   (define (getx) x)
