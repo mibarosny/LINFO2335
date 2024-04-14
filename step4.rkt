@@ -11,7 +11,7 @@
   self)
 
 (define (point x y)
-  (let parent (object))
+  (define parent (object))
   (define (getx) x)
   (define (gety) y)
   (define (type) 'point)
@@ -31,7 +31,7 @@
 
 
 (define (color-point x y color)
-  (let parent (point x y))
+  (define parent (point x y))
   (define (get-color) color)
   (define (type) 'color-point)
   (define (info) (append (send parent 'info) (list (get-color))))
@@ -53,31 +53,13 @@
       (display "Inappropriate receiver object")))
 
 
+(define (new class . class-args)
+  (let ((instance (apply class class-args)))
+    (lambda (msg . msg-args)
+      (if (procedure? instance)
+          (apply instance msg msg-args)
+          (display "Inappropriate receiver object")))))
 
-(define o (object))
-(send o 'type) ; object
-;(send o 'foo) ; should display "Message not understood"
-(define p1 (point 1 2))
-(define p2 (point 3 4))
-(send p1 'getx) ; 1
-(send p1 'gety) ; 2
-(send p2 'getx) ; 3
-(send p2 'gety) ; 4
-(define p (send p1 'add p2))
-(send p 'info) ; (point 4 6)
-(define cp (color-point 5 6 'red))
-(send cp 'type) ; color-point
-(send cp 'getx) ; 5
-(send cp 'gety) ; 6
-(send cp 'get-color) ; red
-(send cp 'info)
-; depending on your implementation this could result in
-; (point 5 6 red) or (color-point 5 6 red)
-; both of these are OK at this step, try to understand why
-; more about this in step 4
-(define cp-1 (send cp 'add (color-point 1 2 'green)))
-(display (send cp-1 'type)) ; color-point
-(display (send cp-1 'getx)) ; 6
-(display (send cp-1 'gety)) ; 8
-(display (send cp-1 'get-color)) ; red
+
+
 
