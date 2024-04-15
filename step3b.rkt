@@ -3,15 +3,15 @@
 ; Students: Rosny Miba, Paquet Timothé
 
 (define (object)
+  (define super 'nil)
   (define (type) 'object)
-  (define (error . _) (display "Message not understood"))
   (define (self m)
     (cond ((eq? m 'type) type)
-          (else error)))
+          (else 'error)))
   self)
 
 (define (point x y)
-  (let parent (object))
+  (define super (object))
   (define (getx) x)
   (define (gety) y)
   (define (type) 'point)
@@ -25,34 +25,37 @@
           ((eq? m 'info) info)
           ((eq? m 'add) add)
           ((eq? m 'setx!) setx!)
-          (else (parent m))))
+          (else (super m))))
   self)
 
-
-
 (define (color-point x y color)
-  (let parent (point x y))
+  (define super (point x y))
   (define (get-color) color)
   (define (type) 'color-point)
-  (define (info) (append (send parent 'info) (list (get-color))))
+  (define (info) (append (send super 'info) (list (get-color))))
   (define (add p) (color-point (+ x ((p 'getx))) (+ y ((p 'gety))) color))
   (define (self m)
     (cond ((eq? m 'type) type)
           ((eq? m 'info) info)
           ((eq? m 'add) add)
           ((eq? m 'get-color) get-color)
-          (else (parent m))))
+          (else (super m))))
   self)
 
-(define (send p . args)
-  (if (procedure? p) ; check if the receiver object is indeed an appropriate receiver object 
-      (let ((l (length args)))
-        (cond ((= l 1) ((p (car args))))
-              ((= l 2) ((p (car args)) (cadr args)))
-              (else (display "Bad number of parameters"))))
+
+(define (send receiver message . args)
+  (if (procedure? receiver) ; check if the receiver object is indeed an appropriate receiver object 
+      (apply (method-lookup receiver message) args)
       (display "Inappropriate receiver object")))
 
+(define (method-lookup receiver message)
+  (define (error . _) (display "Message not understood"))
+  (if (eq? (receiver message) 'error)
+      error
+      (receiver message)))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define o (object))
 (send o 'type) ; object
