@@ -9,7 +9,6 @@
   (define (info) (list (type) (getx) (gety)))
   (define (add p) (point (+ x ((p 'getx))) (+ y ((p 'gety)))))
   (define (setx! a) (set! x a))
-  (define (error . _) (display "Message not understood")) 
   (define (self m)
     (cond ((eq? m 'getx) getx)
           ((eq? m 'gety) gety)
@@ -17,13 +16,17 @@
           ((eq? m 'info) info)
           ((eq? m 'add) add)
           ((eq? m 'setx!) setx!)
-          (else error)))
+          (else 'error))) 
   self)
 
-(define (send p . args)
-  (if (procedure? p) ; check if the receiver object is indeed an appropriate receiver object 
-      (let ((l (length args)))
-        (cond ((= l 1) ((p (car args))))
-              ((= l 2) ((p (car args)) (cadr args)))
-              (else (display "Bad number of parameters"))))
+(define (send receiver message . args)
+  (if (procedure? receiver) ; check if the receiver object is indeed an appropriate receiver object 
+      (apply (method-lookup receiver message) args)
       (display "Inappropriate receiver object")))
+
+(define (method-lookup receiver message)
+  (define (error . _) (display "Message not understood"))
+  (if (eq? (receiver message) 'error)
+      error
+      (receiver message)))
+  
