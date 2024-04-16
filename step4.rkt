@@ -54,8 +54,6 @@
   (send self 'set-self! self)
   self)
 
-; (define (set-self! receiver self)
-    
 
 (define (send receiver message . args)
   (if (procedure? receiver) ; check if the receiver object is indeed an appropriate receiver object 
