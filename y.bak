@@ -1,0 +1,46 @@
+#lang r5rs
+
+(define (format-method method)
+  (let* ((name (caadr method)) (proc method) (lambda-expr `(lambda ,(cdadr method) ,(caddr method))))
+    `(,name . ,lambda-expr))
+  )
+  
+(define-syntax define-class
+  (syntax-rules ()
+    ((define-class (class args ... ) . methods)
+     (begin
+       (define lambda-proc (map
+          (lambda (x) (eval (cdr (format-method x)) (scheme-report-environment 5))) 
+       `methods))
+       (define name-proc (map
+          (lambda (x) (car (format-method x)))
+       `methods))
+       (define dispatcherlist (map cons name-proc lambda-proc))
+       
+        (display (assq 'get dispatcherlist) )
+       (define (class args ...)
+         
+         (display 3)
+         )
+       
+       ;(display `methods)
+       (display "\n")
+       
+       (class 4)
+       )
+     )))
+
+(define-class (account balance)
+  
+  ; (display balance)
+  ; (display 'moma)
+  (define (get) balance)
+  (define (get2) balance)
+  (define (get3) balance)
+  
+  )
+
+
+(display "\n")(display "\n")(display "\n")
+
+ 
