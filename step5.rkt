@@ -5,17 +5,29 @@
 (define-syntax define-class
   (syntax-rules (define)
     ((_ (class class-args ...)
+        (define self self-body ...)
+        (define super super-body ...)
         (define (methods methods-args ...) methods-body ...) ...)
+     
      (begin
        (define (class class-args ...)
-         (define dispatcherlist
-           `((methods ,(lambda (methods-args ...) methods-body ...)) ...)
+         (define self 
+           (lambda (method)
+             (let ((method-find (assq method dispatcherlist)))
+                 (if (eq? method-find #f)
+                     (super method)
+                     (cadr method-find))
+             ))       
            )
-         
-         (lambda (method)
-           (cadr (assq method dispatcherlist)))
-         )
+         (define super super-body ...)
+         (define dispatcherlist
+           (append `((methods ,(lambda (methods-args ...) methods-body ...)) ...
+                   (set-self! ,(lambda (s) (set! self s) (send super 'set-self! s)))))
+           )
+         ; (display dispatcherlist)
+         self)
        )
+
      )
     ))
 
@@ -42,12 +54,39 @@
 
 (define-class (bank-account balance)
   ; init self and super
-  (define (super) (object))
+  (define self (object))
+  (define super (object))
+  
   ; ...
 
   (define (get-balance) balance)
   (define (withdraw n) (set! balance (- balance n)))
-  (define (type) 'bank-account)
+  (define (type_) 'bank-account)
 )
 
+(define (new class . class-args)
+  (define self (apply class class-args))
+  (send self 'set-self! self)
+  self)
+
 (define b (bank-account 56))
+
+(define-class (point x y)
+  (define self point)
+  (define super (object))
+  (define (getx) x)
+  (define (gety) y)
+  (define (type) 'point)
+  (define (info) (list (send self 'type) (send self 'getx) (send self 'gety)))
+  (define (add p) (point (+ x (send p 'getx)) (+ y (send p 'gety))))
+)
+
+(define-class (color-point x y color)
+  (define self color-point)
+  (define super (point x y))
+  (define (get-color) color)
+  (define (type) 'color-point)
+  (define (info) (append (send super 'info) (list color)))
+  (define (add p) (new color-point (+ x (send p 'getx)) (+ y (send p 'gety)) color))
+)
+
