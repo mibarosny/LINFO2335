@@ -2,6 +2,11 @@
 
 ; Students: Rosny Miba, Paquet Timothé
 
+; To use our define-class, we have to respect the rules i.e.
+; - give a class name with class arguments
+; - define ourselves the self variable then the super variable
+; - define an arbitrary number of fundtions
+; - no need to define set-self (our define-class add this method itself)
 
 ; Macro
 (define-syntax define-class

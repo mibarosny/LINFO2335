@@ -2,6 +2,9 @@
 
 ; Students: Rosny Miba, Paquet Timothé
 
+; The send method verify if receiver is well a procedure.
+; If it is the case, it uses method-lookup to retrieve the procedure
+; and apply the function with the arguments args
 
 ; point class
 (define (point x y)

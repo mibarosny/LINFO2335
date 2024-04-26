@@ -2,6 +2,12 @@
 
 ; Students: Rosny Miba, Paquet Timothé
 
+; For the step 0, we based ourselves on the my-cons implementation.
+; We defined a dispatcher function to handle a simple message m.
+; Then this dispatcher is returned.
+; The dispatcher returns only values.
+; The variable containing a point is thus a dispatcher which can access to
+; a closure where x and y are stored and available for this last while the link exist.
 
 ; point class
 (define (point x y)

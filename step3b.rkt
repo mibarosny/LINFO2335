@@ -2,6 +2,12 @@
 
 ; Students: Rosny Miba, Paquet Timothé
 
+; To handle inheritance, we define a variable (i.e. super).
+; This varaible contains an object of the parent class.
+; In our dispatcher, if the message m is not known then we
+; give m to the super object.
+; We can see, for example, that the functions getx and gety are
+; not implemented in the color-point class.
 
 ; object class
 (define (object)

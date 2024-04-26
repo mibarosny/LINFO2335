@@ -2,6 +2,10 @@
 
 ; Students: Rosny Miba, Paquet Timothé
 
+; For the step 1, we define the function in the point closure.
+; The dispatcher of this step returns now functions which can takes arguments.
+; We need a first pair of parenthesis to obtain the desired function
+; and another pair to us the function with her arguments.
 
 ; point class
 (define (point x y)

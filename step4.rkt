@@ -2,6 +2,9 @@
 
 ; Students: Rosny Miba, Paquet Timothé
 
+; In this step we implemented the new method which makes easier
+; to create new object and bind dynamically self to the super class.
+; We implemented the function set-self in each class to handle the dynamic binding.
 
 ; object class
 (define (object)
