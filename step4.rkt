@@ -2,7 +2,10 @@
 
 ; Students: Rosny Miba, Paquet Timothé
 
+
+; object class
 (define (object)
+  (define super 'nil)
   (define (type) 'object)
   (define (set-self! s) (set! self s))
   (define (self m)
@@ -11,6 +14,8 @@
           (else 'error)))
   self)
 
+
+; point class
 (define (point x y)
   (define super (object))
   (define (getx) x)
@@ -32,6 +37,7 @@
   self)
 
 
+; color-point class
 (define (color-point x y color)
   (define super (point x y))
   (define (get-color) color)
@@ -49,19 +55,36 @@
   self)
 
 
+; send method
+(define (send receiver message . args)
+  (if (procedure? receiver) ; check if the receiver object is indeed an appropriate receiver object 
+      (apply (method-lookup receiver message) args)
+      (display "Inappropriate receiver object")))
+
+
+; method-lookup method
+(define (method-lookup receiver message)
+  (define (error . _) (display "Message not understood"))
+  (if (eq? (receiver message) 'error)
+      error
+      (receiver message)))
+
+
+; new method
 (define (new class . class-args)
   (define self (apply class class-args))
   (send self 'set-self! self)
   self)
 
 
-(define (send receiver message . args)
-  (if (procedure? receiver) ; check if the receiver object is indeed an appropriate receiver object 
-      (apply (method-lookup receiver message) args)
-      (display "Inappropriate receiver object")))
 
-(define (method-lookup receiver message)
-  (define (error . _) (display "Message not understood"))
-  (if (eq? (receiver message) 'error)
-      error
-      (receiver message)))
+(define cp (new color-point 5 6 'red))
+(display (send cp 'type)) ; color-point
+(display "\n")
+(display (send cp 'getx)) ; 5
+(display "\n")
+(display (send cp 'gety)) ; 6
+(display "\n")
+(display (send cp 'get-color)) ; red
+(display "\n")
+(display (send cp 'info)) ; (color-point 5 6 red)

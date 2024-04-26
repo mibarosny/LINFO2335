@@ -2,6 +2,8 @@
 
 ; Students: Rosny Miba, Paquet Timothé
 
+
+; point class
 (define (point x y)
   (define (getx) x)
   (define (gety) y)
@@ -18,3 +20,23 @@
           ((eq? m 'setx!) setx!)
           (else (lambda () (display "Message not understood")))))
   self)
+
+
+
+(define p1 (point 1 2))
+(define p2 (point 3 4))
+(display ((p1 'getx))) ; returns 1
+(display "\n")
+(display ((p1 'gety))) ; returns 2
+(display "\n")
+(display ((p2 'getx))) ; returns 3
+(display "\n")
+(display ((p2 'gety))) ; returns 4
+(define p ((p1 'add) p2)) ; returns a new point p
+(display "\n")
+(display ((p 'info))) ; returns (point 4 6)
+(display "\n")
+((p 'foo)) ; should display "Message not understood" error
+((p1 'setx!) 5)
+(display "\n")
+(display ((p1 'getx))) ; returns 5

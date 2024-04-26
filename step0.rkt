@@ -2,6 +2,8 @@
 
 ; Students: Rosny Miba, Paquet Timothé
 
+
+; point class
 (define (point x y)
   (define (dispatch m)
     (cond ((eq? m 'getx) x)
@@ -11,6 +13,18 @@
           ((eq? m 'info2) (list (dispatch 'type) (dispatch 'getx) (dispatch 'gety)))))
   dispatch)
 
+
 ; Yes, we can implement the 'info message in terms of
 ; a call to the other messages 'getx, 'gety and 'type
 ; look (p 'info2)
+
+
+
+(define p (point 1 2))
+(display (p 'getx)) ; 1
+(display "\n")
+(display (p 'gety)) ; 2
+(display "\n")
+(display (p 'type)) ; point
+(display "\n")
+(display (p 'info)) ; (point 1 2)
